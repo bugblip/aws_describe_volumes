@@ -16,16 +16,19 @@ def describeSingleVolume(region, vid):
     volumeDict = {}
     response = client.describe_volumes(VolumeIds=[vid])
     volData=response['Volumes'][0]
+    #print(volData)
     
     #DataCollection & Adding Data to data dictionary
 
+    volumeDict["VolumeId"]          = volData.get("VolumeId","-")
+    volumeDict["Size"]              = volData.get("Size","-")
+    volumeDict["VolumeType"]        = volData.get("VolumeType","-")
+    volumeDict["Iops"]              = volData.get("Iops","-")
+    volumeDict["State"]             = volData.get("State","-")
     volumeDict['AvailabilityZone']  = volData.get("AvailabilityZone","-")
     volumeDict['Encrypted']         = volData.get("Encrypted","-")
-    volumeDict["Size"]              = volData.get("Size","-")
-    volumeDict["State"]             = volData.get("State","-")
-    volumeDict["VolumeId"]          = volData.get("VolumeId","-")
-    volumeDict["Iops"]              = volData.get("Iops","-")
-    volumeDict["VolumeType"]        = volData.get("VolumeType","-")
+    volumeDict["KmsKeyId"]          = volData.get("KmsKeyId","-")
+    volumeDict["SnapshotId"]        = volData.get("SnapshotId","-")
     volumeDict["MultiAttach"]       = volData.get("MultiAttachEnabled","-")
     volumeDict["LaunchTime"]        = str(volData.get("CreateTime","-"))
 
