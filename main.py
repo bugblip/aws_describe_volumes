@@ -2,22 +2,32 @@ import describe_volumes as dv
 import csv_reader_writer as crw
 import sys
 import datetime
+import boto3
+
 
 def runtime(startTime):
     endTime = datetime.datetime.now()
     executionTime = endTime - startTime
-    print (f"Script RunTime = {executionTime}".center(80,"-"))
+    print (f"Script RunTime (HH:MM:SS)= {executionTime}".center(100,"-"))
+    print("\n")
 
 if __name__ == '__main__':
     
     startTime = datetime.datetime.now()
-    print (f"Execution started at = {startTime}".center(80,"-"))
-    regions = ["us-east-2","us-east-1","us-west-1","us-west-2","af-south-1","ap-east-1","ap-south-1","ap-northeast-3","ap-northeast-2","ap-southeast-1","ap-southeast-2","ap-northeast-1","ca-central-1","eu-central-1","eu-west-1","eu-west-2","eu-south-1","eu-west-3","eu-north-1","me-south-1","sa-east-1"]
+    print("\n")
+    print (f"Execution started at = {startTime}".center(100,"-"))
     
+    #Getting AWS Region Names
+    regions = []
+    client = boto3.client('ec2')
+    response = client.describe_regions()
+    regData = response['Regions']
     print("Select the region in which the AWS resource exist")
-    for r in range(0, len(regions)):
-        print(f"{r+1}.\t{regions[r]}")
-        
+    for i in range (0, len(regData)):
+        rid = regData[i].get("RegionName")
+        regions.append(rid)
+        print(f"{i+1}.\t{rid}")
+    
     choice1 = int(input())
     if(choice1 >=1 and choice1 <= len(regions)):
         region = regions[choice1-1]

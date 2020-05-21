@@ -1,11 +1,18 @@
 import boto3
 import datetime
+import sys
 
 def collectVolumeID(region):
     client = boto3.client('ec2',region_name=region)
     allvolumeIds = []
     response = client.describe_volumes()
     volData=response['Volumes']
+    volCount= len(volData)
+    if (volCount > 0):
+        print(f"There are {volCount} volumes in {region}")
+    else:
+        print(f"No EBS volume found in {region}")
+        sys.exit()
     for vc in range (0, len(volData)):
         id = volData[vc]['VolumeId']
         allvolumeIds.append(id)
